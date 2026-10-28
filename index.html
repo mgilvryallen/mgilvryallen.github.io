@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>M'Gilvry Allen's apps</title>
+    <meta name="description" content="Small apps for playing music, cooking and keeping track of things, by M'Gilvry Allen. They run on your phone, work offline, and ask for no sign-up.">
+    <meta name="theme-color" content="#f7f3e9">
+    <link rel="icon" href="littleguy/icons/icon.svg" type="image/svg+xml">
+    <!-- No service worker here, on purpose: one at the site's root would take over every app below it -->
+    <style>
+        /* The fonts and icons come from the apps themselves, so this page always matches them */
+        @font-face {
+            font-family: 'Rug Pull';
+            src: url('drone/fonts/TAYRugPull.otf') format('opentype');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Lumios Typewriter';
+            src: url('drone/fonts/LumiosTypewriter-Old.ttf') format('truetype');
+            font-display: swap;
+        }
+
+        :root {
+            --parchment: #f7f3e9;
+            --paper: #fffdf7;
+            --ink: #2c2416;
+            --heading: #4a3f2f;
+            --green: #3d5a42;
+            --tan: #8b7759;
+            --light-tan: #c9bda5;
+            --muted: #6b5d4f;
+            --rust: #a0522d;
+            --ochre: #b07d2a;
+            --woad: #3e5f8a;
+            --plum: #7b4b6a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        p {
+            text-wrap: pretty;
+        }
+
+        h1, h2 {
+            text-wrap: balance;
+        }
+
+        body {
+            font-family: 'Lumios Typewriter', Georgia, serif;
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--ink);
+            background-color: var(--parchment);
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139, 119, 89, 0.02) 2px, rgba(139, 119, 89, 0.02) 4px);
+            padding: calc(16px + env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom));
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin: 18px 0 28px;
+        }
+
+        h1 {
+            font-family: 'Rug Pull', Georgia, serif;
+            font-weight: normal;
+            font-size: 34px;
+            letter-spacing: 1px;
+            color: var(--heading);
+            line-height: 1.15;
+        }
+
+        .intro {
+            color: var(--muted);
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .apps {
+            display: grid;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--light-tan);
+            border-top: 4px solid var(--accent);
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 64px 1fr;
+            gap: 4px 16px;
+        }
+
+        .card img {
+            width: 64px;
+            height: 64px;
+            grid-row: span 2;
+        }
+
+        h2 {
+            font-family: 'Rug Pull', Georgia, serif;
+            font-weight: normal;
+            font-size: 24px;
+            color: var(--accent);
+            line-height: 1.2;
+            margin-top: 4px;
+        }
+
+        .card p {
+            font-size: 15px;
+            color: var(--ink);
+        }
+
+        .card .actions {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+        }
+
+        .open {
+            display: inline-block;
+            padding: 9px 22px;
+            background: var(--accent);
+            color: var(--parchment);
+            text-decoration: none;
+            font-family: 'Rug Pull', Georgia, serif;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            border-radius: 999px;
+        }
+
+        .open:hover {
+            filter: brightness(0.88);
+        }
+
+        .code {
+            color: var(--green);
+            font-size: 14px;
+        }
+
+        .note {
+            margin-top: 28px;
+            padding: 16px 20px;
+            border: 1px dashed var(--light-tan);
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .note b {
+            color: var(--heading);
+            font-weight: normal;
+            font-family: 'Rug Pull', Georgia, serif;
+            letter-spacing: 0.5px;
+        }
+
+        .note p + p {
+            margin-top: 8px;
+        }
+
+        .credit {
+            text-align: center;
+            margin-top: 28px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        a {
+            color: var(--green);
+        }
+
+        /* Two columns on a wide screen */
+        @media (min-width: 900px) {
+            .container {
+                max-width: 900px;
+            }
+
+            .apps {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            header, .note {
+                max-width: 560px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>M'Gilvry Allen's apps</h1>
+            <p class="intro">Small apps for playing music, cooking, and keeping track of things. They run in your browser or on your phone's home screen, work offline, and ask for no sign-up.</p>
+        </header>
+
+        <main class="apps" id="apps"></main>
+
+        <div class="note">
+            <p><b>On your phone:</b> open one, then on an iPhone tap Share and <b>Add to Home Screen</b>; on Android, open the menu and tap <b>Install app</b>. It opens like any other app from then on.</p>
+            <p><b>Make your own:</b> every app is free to copy. Its code link has a <b>Use this template</b> button, and the README says how to set it up.</p>
+        </div>
+
+        <div class="credit">
+            More at <a href="https://mgilvryallen.com" target="_blank">mgilvryallen.com</a>
+        </div>
+    </div>
+
+    <script>
+        // One entry per app: its folder here (and its repo on GitHub), its name, a line about it,
+        // and the color it wears. Add an app by adding a line.
+        const APPS = [
+            { slug: 'drone', name: 'Drone', color: 'var(--rust)',
+                about: 'A shruti-box style drone to practice against. Pick a key, mix in the voices you want, and play along. Presets for Front Porch, Cross A, Singing Bowl and more.' },
+            { slug: 'tunes', name: 'Tunes', color: 'var(--woad)',
+                about: 'A tunebook for the tunes you know and the ones you\'re learning: old-time, Irish, Scottish, Québécois. Sheet music and chords from The Session, sets, and a drone in the right key.' },
+            { slug: 'littleguy', name: 'Little Guy', color: 'var(--ochre)',
+                about: 'Loops and a drone that layer and wander on their own. Press play and it builds; four sliders steer it, loosely.' },
+            { slug: 'gas', name: 'Gas', color: 'var(--green)',
+                about: 'A gas mileage tracker: log fill-ups, see MPG, price per gallon and miles per month, for as many vehicles as you have.' },
+            { slug: 'soup', name: 'Soup', color: 'var(--plum)',
+                about: 'Twelve favorite soups for the Instant Pot, each with a stovetop version.' }
+        ];
+
+        document.getElementById('apps').innerHTML = APPS.map(app => `
+            <section class="card" style="--accent: ${app.color}">
+                <img src="${app.slug}/icons/icon.svg" alt="">
+                <h2>${app.name}</h2>
+                <p>${app.about}</p>
+                <div class="actions">
+                    <a class="open" href="${app.slug}/">Open ${app.name}</a>
+                    <a class="code" href="https://github.com/mgilvryallen/${app.slug}" target="_blank">code</a>
+                </div>
+            </section>`).join('');
+    </script>
+</body>
+</html>
