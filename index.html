@@ -220,13 +220,14 @@
 
     <script>
         // One entry per app: its folder here (and its repo on GitHub), its name, a line about it,
-        // and the color it wears. Add an app by adding a line.
+        // and the color it wears. Add an app by adding a line. hidden: true keeps an app off the
+        // page while it's still being made (it's still at its own address).
         const APPS = [
             { slug: 'drone', name: 'Drone', color: 'var(--rust)',
                 about: 'A shruti-box style drone to practice against. Pick a key, mix in the voices you want, and play along. Presets for Front Porch, Cross A, Singing Bowl and more.' },
             { slug: 'tunes', name: 'Tunes', color: 'var(--woad)',
                 about: 'A tunebook for the tunes you know and the ones you\'re learning: old-time, Irish, Scottish, Québécois. Sheet music and chords from The Session, sets, and a drone in the right key.' },
-            { slug: 'littleguy', name: 'Little Guy', color: 'var(--ochre)',
+            { slug: 'littleguy', name: 'Little Guy', color: 'var(--ochre)', hidden: true,
                 about: 'Loops and a drone that layer and wander on their own. Press play and it builds; four sliders steer it, loosely.' },
             { slug: 'gas', name: 'Gas', color: 'var(--green)',
                 about: 'A gas mileage tracker: log fill-ups, see MPG, price per gallon and miles per month, for as many vehicles as you have.' },
@@ -234,7 +235,7 @@
                 about: 'Twelve favorite soups for the Instant Pot, each with a stovetop version.' }
         ];
 
-        document.getElementById('apps').innerHTML = APPS.map(app => `
+        document.getElementById('apps').innerHTML = APPS.filter(app => !app.hidden).map(app => `
             <section class="card" style="--accent: ${app.color}">
                 <img src="${app.slug}/icons/icon.svg" alt="">
                 <h2>${app.name}</h2>

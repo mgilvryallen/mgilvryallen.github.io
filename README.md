@@ -6,7 +6,8 @@ The front page at https://mgilvryallen.github.io/, featuring the apps that live 
 and [Soup](https://github.com/mgilvryallen/soup).
 
 Everything is in `index.html`. To feature another app, add a line to the `APPS` list there: its
-repo name, its name, a sentence about it, and a color. The icon and fonts come from the apps
+repo name, its name, a sentence about it, and a color. Add `hidden: true` to keep one off the
+page while it's in progress (Little Guy, for now). The icon and fonts come from the apps
 themselves, so the page always matches them.
 
 There's no service worker on this page on purpose: one at the site's root would take over every
