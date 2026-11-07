@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>M'Gilvry Allen's apps</title>
-    <meta name="description" content="Small apps for playing music, cooking and keeping track of things, by M'Gilvry Allen. They run on your phone, work offline, and ask for no sign-up.">
+    <meta name="description" content="Small apps for playing and learning music, cooking and keeping track of things, by M'Gilvry Allen. They run on your phone, work offline, and ask for no sign-up.">
     <meta name="theme-color" content="#f7f3e9">
     <link rel="icon" href="littleguy/icons/icon.svg" type="image/svg+xml">
     <!-- No service worker here, on purpose: one at the site's root would take over every app below it -->
@@ -35,6 +35,7 @@
             --ochre: #b07d2a;
             --woad: #3e5f8a;
             --plum: #7b4b6a;
+            --teal: #2f6f6b;
         }
 
         * {
@@ -203,7 +204,7 @@
     <div class="container">
         <header>
             <h1>M'Gilvry Allen's apps</h1>
-            <p class="intro">Small apps for playing music, cooking, and keeping track of things. They run in your browser or on your phone's home screen, work offline, and ask for no sign-up.</p>
+            <p class="intro">Small apps for playing and learning music, cooking, and keeping track of things. They run in your browser or on your phone's home screen, work offline, and ask for no sign-up.</p>
         </header>
 
         <main class="apps" id="apps"></main>
@@ -219,32 +220,49 @@
     </div>
 
     <script>
-        // One entry per app: its folder here (and its repo on GitHub), its name, a line about it,
-        // and the color it wears. Add an app by adding a line. hidden: true keeps an app off the
-        // page while it's still being made (it's still at its own address).
+        // One entry per app: its folder here (and its repo on GitHub), its name, and the color it
+        // wears. Each app describes itself: the line under its name is the description in its own
+        // manifest.webmanifest, read when the page opens, so it changes when the app does. about
+        // is only a fallback, shown until then or if the manifest can't be read. Add an app by
+        // adding a line. hidden: true keeps an app off the page while it's still being made (it's
+        // still at its own address).
         const APPS = [
             { slug: 'drone', name: 'Drone', color: 'var(--rust)',
-                about: 'A shruti-box style drone to practice against. Pick a key, mix in the voices you want, and play along. Presets for Front Porch, Cross A, Singing Bowl and more.' },
+                about: 'A shruti-box style drone to practice against, in just intonation. Pick a key, mix in the voices you want, and let them mingle. Presets for Front Porch, Cross A, Singing Bowl and more.' },
             { slug: 'tunes', name: 'Tunes', color: 'var(--woad)',
                 about: 'A tunebook for the tunes you know and the ones you\'re learning: old-time, Irish, Scottish, Québécois. Sheet music and chords from The Session, sets, and a drone in the right key.' },
+            { slug: 'theory', name: 'Theory', color: 'var(--teal)',
+                about: 'Music theory you can turn in your hands: a wheel of scales and modes that names what you make, the modes side by side, chords, the circle of fifths and an ear game.' },
             { slug: 'littleguy', name: 'Little Guy', color: 'var(--ochre)', hidden: true,
-                about: 'Loops and a drone that layer and wander on their own. Press play and it builds; four sliders steer it, loosely.' },
+                about: 'Loops and a drone that layer and wander on their own. Press play and it builds; four sliders steer it, loosely. Record a few seconds of wherever you are and it plays in that place\'s key, with the place woven in.' },
             { slug: 'gas', name: 'Gas', color: 'var(--green)',
-                about: 'A gas mileage tracker: log fill-ups, see MPG, price per gallon and miles per month, for as many vehicles as you have.' },
+                about: 'A gas mileage tracker: log fill-ups, see MPG, price per gallon and miles per month, for as many vehicles as you have. It also reminds you when the oil and tires are due.' },
             { slug: 'soup', name: 'Soup', color: 'var(--plum)',
                 about: 'Twelve favorite soups for the Instant Pot, each with a stovetop version.' }
         ];
 
-        document.getElementById('apps').innerHTML = APPS.filter(app => !app.hidden).map(app => `
+        const shown = APPS.filter(app => !app.hidden);
+        document.getElementById('apps').innerHTML = shown.map(app => `
             <section class="card" style="--accent: ${app.color}">
                 <img src="${app.slug}/icons/icon.svg" alt="">
                 <h2>${app.name}</h2>
-                <p>${app.about}</p>
+                <p id="about-${app.slug}"></p>
                 <div class="actions">
                     <a class="open" href="${app.slug}/">Open ${app.name}</a>
                     <a class="code" href="https://github.com/mgilvryallen/${app.slug}" target="_blank">code</a>
                 </div>
             </section>`).join('');
+
+        shown.forEach(app => {
+            const line = document.getElementById('about-' + app.slug);
+            line.textContent = app.about;
+            fetch(app.slug + '/manifest.webmanifest', { cache: 'no-cache' })
+                .then(response => response.ok ? response.json() : null)
+                .then(manifest => {
+                    if (manifest && typeof manifest.description === 'string' && manifest.description.trim()) line.textContent = manifest.description.trim();
+                })
+                .catch(() => {});
+        });
     </script>
 </body>
 </html>
