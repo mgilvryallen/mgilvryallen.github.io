@@ -259,7 +259,11 @@
             fetch(app.slug + '/manifest.webmanifest', { cache: 'no-cache' })
                 .then(response => response.ok ? response.json() : null)
                 .then(manifest => {
-                    if (manifest && typeof manifest.description === 'string' && manifest.description.trim()) line.textContent = manifest.description.trim();
+                    if (!manifest) return;
+                    if (typeof manifest.description === 'string' && manifest.description.trim()) line.textContent = manifest.description.trim();
+                    // The app's own icon address, version and all, so a new icon shows here at once
+                    const svg = Array.isArray(manifest.icons) && manifest.icons.find(icon => icon && icon.type === 'image/svg+xml' && typeof icon.src === 'string');
+                    if (svg && /^[\w./?=&-]+$/.test(svg.src)) line.parentElement.querySelector('img').src = `${app.slug}/${svg.src}`;
                 })
                 .catch(() => {});
         });

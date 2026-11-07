@@ -11,8 +11,9 @@ the page while it's in progress.
 
 The apps describe themselves: each card's sentence is the `description` in that app's own
 `manifest.webmanifest`, read when the page opens, so updating an app's manifest updates its card.
-The `about` in `APPS` is only shown until then, or if the manifest can't be read. The icons and
-fonts come from the apps too, so the page always matches them.
+The `about` in `APPS` is only shown until then, or if the manifest can't be read. The icon comes from
+the manifest too (its SVG entry, with any `?v=` an app adds so a new icon isn't stuck in a
+browser's cache), and the fonts from the apps, so the page always matches them.
 
 There's no service worker on this page on purpose: one at the site's root would take over every
 app below it.
