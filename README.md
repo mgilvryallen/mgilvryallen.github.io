@@ -7,7 +7,7 @@ The front page at https://mgilvryallen.github.io/, featuring the apps that live 
 
 Everything is in `index.html`. To feature another app, add a line to the `APPS` list there: its
 repo name, its name, a color, and a fallback sentence about it. Add `hidden: true` to keep one off
-the page while it's in progress (Little Guy, for now).
+the page while it's in progress.
 
 The apps describe themselves: each card's sentence is the `description` in that app's own
 `manifest.webmanifest`, read when the page opens, so updating an app's manifest updates its card.
