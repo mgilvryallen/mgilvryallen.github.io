@@ -1,0 +1,45 @@
+[
+    {
+        "slug": "drone",
+        "name": "Drone",
+        "color": "rust",
+        "short": "",
+        "about": "A shruti-box style drone generator, tuned to just intonation. Pick a key, blend in the voices you want, add a little chaos. Presets for modal fiddle tunes, deep sleep and more."
+    },
+    {
+        "slug": "tunes",
+        "name": "Tunes",
+        "color": "woad",
+        "short": "",
+        "about": "A tunebook for fiddlers. Searches thesession.org for dots and chords as you add tunes. Sort your list any way you like, make sets, play a drone in key."
+    },
+    {
+        "slug": "theory",
+        "name": "Theory",
+        "color": "teal",
+        "short": "",
+        "about": "Music theory you can turn in your hands. A wheel of scales, modes and chords, the circle of fifths and an ear game."
+    },
+    {
+        "slug": "littleguy",
+        "name": "Little Guy",
+        "color": "ochre",
+        "website": false,
+        "short": "",
+        "about": "Generative ambient loopy guy. Capture a clip of wherever you are and let him run with it. Four mysterious sliders guide his movement, but who can say what they do?"
+    },
+    {
+        "slug": "gas",
+        "name": "Gas",
+        "color": "green",
+        "short": "",
+        "about": "A mileage and maintenance tracker for your car. Tracks mpg and spend over time, shows you some cool graphs, reminds you when you need service."
+    },
+    {
+        "slug": "soup",
+        "name": "Soup",
+        "color": "plum",
+        "short": "",
+        "about": "Twelve of my favorite soups to make in my Instant Pot. Stovetop versions also."
+    }
+]

@@ -5,9 +5,12 @@ The front page at https://mgilvryallen.github.io/, featuring the apps that live 
 [Theory](https://github.com/mgilvryallen/theory), [Little Guy](https://github.com/mgilvryallen/littleguy),
 [Gas](https://github.com/mgilvryallen/gas) and [Soup](https://github.com/mgilvryallen/soup).
 
-Everything is in `index.html`. To feature another app, add a line to the `APPS` list there: its
-repo name, its name, a color, and a fallback sentence about it. Add `hidden: true` to keep one off
-the page while it's in progress.
+The list of apps is `apps.json`. To feature another app, add an entry there: its repo name
+(`slug`), its `name`, a `color` (rust, ochre, woad, plum, teal or green), and a fallback sentence
+about it (`about`). Two optional switches: `"hidden": true` keeps an app off this page while it's in
+progress, and `"website": false` keeps it off the Projects page on
+[mgilvryallen.com](https://mgilvryallen.com/projects.html#digital), which reads this same file.
+That page shows `short` (a line for the website) if it's filled in, otherwise the app's description.
 
 The apps describe themselves: each card's sentence is the `description` in that app's own
 `manifest.webmanifest`, read when the page opens, so updating an app's manifest updates its card.

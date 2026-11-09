@@ -224,53 +224,57 @@
     </div>
 
     <script>
-        // One entry per app: its folder here (and its repo on GitHub), its name, and the color it
-        // wears. Each app describes itself: the line under its name is the description in its own
+        // The list of apps lives in apps.json (one entry per app: its folder here and its repo on
+        // GitHub, its name, the color it wears, a fallback sentence about it). mgilvryallen.com reads
+        // the same file for its Projects page, so adding an app there puts it in both places.
+        // "hidden": true keeps an app off this page; "website": false keeps it off mgilvryallen.com.
+        // Each app describes itself: the line under its name is the description in its own
         // manifest.webmanifest, read when the page opens, so it changes when the app does. about
-        // is only a fallback, shown until then or if the manifest can't be read. Add an app by
-        // adding a line. hidden: true keeps an app off the page while it's still being made (it's
-        // still at its own address).
-        const APPS = [
-            { slug: 'drone', name: 'Drone', color: 'var(--rust)',
-                about: 'A shruti-box style drone generator, tuned to just intonation. Pick a key, blend in the voices you want, add a little chaos. Presets for modal fiddle tunes, deep sleep and more.' },
-            { slug: 'tunes', name: 'Tunes', color: 'var(--woad)',
-                about: 'A tunebook for fiddlers. Searches thesession.org for dots and chords as you add tunes. Sort your list any way you like, make sets, play a drone in key.' },
-            { slug: 'theory', name: 'Theory', color: 'var(--teal)',
-                about: 'Music theory you can turn in your hands. A wheel of scales, modes and chords, the circle of fifths and an ear game.' },
-            { slug: 'littleguy', name: 'Little Guy', color: 'var(--ochre)',
-                about: 'Generative ambient loopy guy. Capture a clip of wherever you are and let him run with it. Four mysterious sliders guide his movement, but who can say what they do?' },
-            { slug: 'gas', name: 'Gas', color: 'var(--green)',
-                about: 'A mileage and maintenance tracker for your car. Tracks mpg and spend over time, shows you some cool graphs, reminds you when you need service.' },
-            { slug: 'soup', name: 'Soup', color: 'var(--plum)',
-                about: 'Twelve of my favorite soups to make in my Instant Pot. Stovetop versions also.' }
-        ];
+        // is only a fallback, shown until then or if the manifest can't be read.
+        const COLORS = ['rust', 'ochre', 'woad', 'plum', 'teal', 'green'];
 
-        const shown = APPS.filter(app => !app.hidden);
-        document.getElementById('apps').innerHTML = shown.map(app => `
-            <section class="card" style="--accent: ${app.color}">
-                <img src="${app.slug}/icons/icon.svg" alt="">
-                <h2>${app.name}</h2>
-                <p id="about-${app.slug}"></p>
-                <div class="actions">
-                    <a class="open" href="${app.slug}/">Open ${app.name}</a>
-                    <a class="code" href="https://github.com/mgilvryallen/${app.slug}" target="_blank">code</a>
-                </div>
-            </section>`).join('');
+        function showApps(apps) {
+            const shown = apps.filter(app => app && !app.hidden && /^[\w.-]+$/.test(app.slug || ''));
+            const list = document.getElementById('apps');
+            list.innerHTML = '';
+            shown.forEach(app => {
+                const card = document.createElement('section');
+                card.className = 'card';
+                card.style.setProperty('--accent', `var(--${COLORS.includes(app.color) ? app.color : 'green'})`);
+                card.innerHTML = `
+                    <img src="${app.slug}/icons/icon.svg" alt="">
+                    <h2></h2>
+                    <p></p>
+                    <div class="actions">
+                        <a class="open" href="${app.slug}/"></a>
+                        <a class="code" href="https://github.com/mgilvryallen/${app.slug}" target="_blank">code</a>
+                    </div>`;
+                const name = app.name || app.slug;
+                card.querySelector('h2').textContent = name;
+                card.querySelector('.open').textContent = 'Open ' + name;
+                const line = card.querySelector('p');
+                line.textContent = app.about || '';
+                list.appendChild(card);
 
-        shown.forEach(app => {
-            const line = document.getElementById('about-' + app.slug);
-            line.textContent = app.about;
-            fetch(app.slug + '/manifest.webmanifest', { cache: 'no-cache' })
-                .then(response => response.ok ? response.json() : null)
-                .then(manifest => {
-                    if (!manifest) return;
-                    if (typeof manifest.description === 'string' && manifest.description.trim()) line.textContent = manifest.description.trim();
-                    // The app's own icon address, version and all, so a new icon shows here at once
-                    const svg = Array.isArray(manifest.icons) && manifest.icons.find(icon => icon && icon.type === 'image/svg+xml' && typeof icon.src === 'string');
-                    if (svg && /^[\w./?=&-]+$/.test(svg.src)) line.parentElement.querySelector('img').src = `${app.slug}/${svg.src}`;
-                })
-                .catch(() => {});
-        });
+                fetch(app.slug + '/manifest.webmanifest', { cache: 'no-cache' })
+                    .then(response => response.ok ? response.json() : null)
+                    .then(manifest => {
+                        if (!manifest) return;
+                        if (typeof manifest.description === 'string' && manifest.description.trim()) line.textContent = manifest.description.trim();
+                        // The app's own icon address, version and all, so a new icon shows here at once
+                        const svg = Array.isArray(manifest.icons) && manifest.icons.find(icon => icon && icon.type === 'image/svg+xml' && typeof icon.src === 'string');
+                        if (svg && /^[\w./?=&-]+$/.test(svg.src)) card.querySelector('img').src = `${app.slug}/${svg.src}`;
+                    })
+                    .catch(() => {});
+            });
+        }
+
+        fetch('apps.json', { cache: 'no-store' })
+            .then(response => response.json())
+            .then(apps => showApps(Array.isArray(apps) ? apps : []))
+            .catch(() => {
+                document.getElementById('apps').innerHTML = '<p class="intro">The list of apps didn\'t load. Try reloading the page.</p>';
+            });
     </script>
 </body>
 </html>
