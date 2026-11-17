@@ -24,6 +24,7 @@
         "slug": "littleguy",
         "name": "Little Guy",
         "color": "ochre",
+        "hidden": true,
         "website": false,
         "short": "",
         "about": "Generative ambient loopy guy. Capture a clip of wherever you are and let him run with it. Four mysterious sliders guide his movement, but who can say what they do?"
